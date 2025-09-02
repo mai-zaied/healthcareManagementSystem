@@ -1,0 +1,33 @@
+code structure :
+
+com.example.healthcareappointmentsystem
+|
+├── HealthcareAppointmentSystemApplication.java
+|
+├── config
+├── controller
+├── entity
+|    ├── User.java      //the base table that holds all users
+|    ├── Doctor.java
+|    ├── DoctorAvailability.java
+|    ├── Patient.java
+|    └── Appointment.java
+├── document
+├── repository
+├── security
+      ├── Role.java
+├── service
+├── service.impl
+├── exception
+└── util
+
+____________________________________________________________
+
+Joined Inheritance
+(@Inheritance(strategy = InheritanceType.JOINED))
+this means that the parent class (user has its own table) and each child
+also has its own table where the child tables only stores their specific fields
+JPA uses a join between the child and the parent to fetch the full object
+
+____________________________________________________________
+
