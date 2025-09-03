@@ -9,12 +9,13 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "patients")
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Entity
+@Table(name = "patients")
 public class Patient extends User {
 
     private String phoneNumber;

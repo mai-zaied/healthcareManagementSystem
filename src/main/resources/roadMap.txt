@@ -9,11 +9,18 @@ com.example.healthcareappointmentsystem
 ├── entity
 |    ├── User.java      //the base table that holds all users
 |    ├── Doctor.java
-|    ├── DoctorAvailability.java
 |    ├── Patient.java
 |    └── Appointment.java
 ├── document
+|    ├── Prescription.java
+|    └── MedicalRecord.java
 ├── repository
+|    ├── UserRepository.java      //the base table that holds all users
+|    ├── DoctorRepository.java
+|    ├── PatientRepository.java
+|    ├── PrescriptionRepository.java
+|    ├── PatientAppointmentRepository.java
+|    └── AppointmentRepository.java
 ├── security
       ├── Role.java
 ├── service
@@ -24,7 +31,7 @@ com.example.healthcareappointmentsystem
 ____________________________________________________________
 
 Joined Inheritance
-(@Inheritance(strategy = InheritanceType.JOINED))
+(@Inheritance(strategy = InheritanceType. JOINED))
 this means that the parent class (user has its own table) and each child
 also has its own table where the child tables only stores their specific fields
 JPA uses a join between the child and the parent to fetch the full object

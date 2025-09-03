@@ -1,10 +1,8 @@
 package com.example.healthcareappointmentsystem.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,6 +13,19 @@ import lombok.Setter;
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    private Long id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+
+    @Column(nullable = false)
+    private LocalDateTime appointmentDateTime;
+
+    @Column(nullable = false)
+    private boolean completed = false;
 }
