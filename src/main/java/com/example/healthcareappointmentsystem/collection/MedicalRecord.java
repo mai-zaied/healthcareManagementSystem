@@ -1,4 +1,4 @@
-package com.example.healthcareappointmentsystem.document;
+package com.example.healthcareappointmentsystem.collection;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -16,7 +16,9 @@ public class MedicalRecord {
     @Id
     private String id;
     private Long patientId;
+    private List<String> allergies;
+    private List<String> chronicConditions;
 
-    private List<Prescription> prescriptions;
+    private List<String> prescriptionIds;
     private List<String> labResults;
 }

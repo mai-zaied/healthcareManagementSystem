@@ -1,21 +1,20 @@
 package com.example.healthcareappointmentsystem.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-/**
- * Represents an available time slot for a doctor on a specific date.
- * Each slot corresponds to a start and end time on a particular day.
- */
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "doctor_availability")
-public class DoctorAvailability {
+@Table(name = "doctor_schedules")
+public class DoctorSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +25,15 @@ public class DoctorAvailability {
     private Doctor doctor;
 
     @Column(nullable = false)
-    private LocalDate date; // The specific day this slot is available
+    private LocalDate date; // The specific date (2024-09-14)
 
+    // Represents one block of time (08:00 to 14:00)
     @Column(nullable = false)
     private LocalTime startTime;
 
     @Column(nullable = false)
     private LocalTime endTime;
 
-    @Column(nullable = false)
-    private boolean isBooked = false; // True if the slot has been booked
+    // Slot duration in minutes for this day (30)
+    private Integer slotDuration = 30;
 }

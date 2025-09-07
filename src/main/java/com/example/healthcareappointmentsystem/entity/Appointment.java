@@ -1,7 +1,10 @@
 package com.example.healthcareappointmentsystem.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Getter
@@ -9,7 +12,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "appointments")
+@Table(name = "appointments",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"doctor_id", "startTime"})
+        })
+
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +31,20 @@ public class Appointment {
     private Patient patient;
 
     @Column(nullable = false)
-    private LocalDateTime appointmentDateTime;
+    private LocalDateTime startTime;
 
     @Column(nullable = false)
-    private boolean completed = false;
+    private LocalDateTime endTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AppointmentStatus status = AppointmentStatus.SCHEDULED;
+
+    @PrePersist
+    @PreUpdate
+    public void calculateEndTime() {
+        if (this.startTime != null) {
+            this.endTime = this.startTime.plusMinutes(30);
+        }
+    }
 }

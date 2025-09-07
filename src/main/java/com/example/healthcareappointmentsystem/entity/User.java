@@ -1,27 +1,20 @@
 package com.example.healthcareappointmentsystem.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import com.example.healthcareappointmentsystem.security.Role;
 
 /**
- * This is an abstract base class stores data for all system users
+ * This is a base class stores data for all system users
  * <p>Inheritance strategy: JOINED,
  * each subclass has its own table sharing the same primary key
  */
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
-
-public abstract class User {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

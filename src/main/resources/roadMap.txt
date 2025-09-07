@@ -24,7 +24,6 @@ com.example.healthcareappointmentsystem
 ├── security
       ├── Role.java
 ├── service
-├── service.impl
 ├── exception
 └── util
 

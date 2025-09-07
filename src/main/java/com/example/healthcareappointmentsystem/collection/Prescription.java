@@ -1,4 +1,4 @@
-package com.example.healthcareappointmentsystem.document;
+package com.example.healthcareappointmentsystem.collection;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -19,7 +19,9 @@ public class Prescription {
 
     private Long patientId;
     private Long doctorId;
+    private Long appointmentId;
 
+    private String diagnosis;
     private String notes;
     private List<String> medicines;
     private LocalDateTime date = LocalDateTime.now();

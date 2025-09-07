@@ -1,8 +1,13 @@
 package com.example.healthcareappointmentsystem.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,7 +19,5 @@ public class Doctor extends User {
 
     @Column(nullable = false)
     private String specialty;
-
-    private LocalTime workStart = LocalTime.of(8, 0);
-    private LocalTime workEnd = LocalTime.of(17, 0);
+    private String phoneNumber;
 }
