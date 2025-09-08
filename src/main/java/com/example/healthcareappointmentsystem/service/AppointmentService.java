@@ -1,5 +1,6 @@
 package com.example.healthcareappointmentsystem.service;
 
+import com.example.healthcareappointmentsystem.aop.LogOperation;
 import com.example.healthcareappointmentsystem.dto.BookAppointmentRequest;
 import com.example.healthcareappointmentsystem.entity.Appointment;
 import com.example.healthcareappointmentsystem.entity.AppointmentStatus;
@@ -27,6 +28,7 @@ public class AppointmentService {
     private final PatientRepository patientRepository;
     private final DoctorScheduleRepository doctorScheduleRepository;
 
+    @LogOperation("BOOK_APPOINTMENT")
     @Transactional
     public Appointment bookAppointment( BookAppointmentRequest request){
         Patient patient = patientRepository.findById(request.getPatientId())
@@ -71,6 +73,7 @@ public class AppointmentService {
         return appointmentRepository.findByDoctorId(doctorId);
     }
 
+    @LogOperation("COMPLETE_APPOINTMENT")
     @Transactional
     public Appointment markAppointmentCompleted(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
@@ -80,6 +83,7 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
+    @LogOperation("CANCEL_APPOINTMENT")
     @Transactional
     public Appointment cancelAppointment(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)

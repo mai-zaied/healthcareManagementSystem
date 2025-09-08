@@ -25,4 +25,10 @@ public class Prescription {
     private String notes;
     private List<String> medicines;
     private LocalDateTime date = LocalDateTime.now();
+
+    @Override
+    public String toString() {
+        return String.format("Prescription[id=%s, patientId=%d, doctorId=%d, medicines=%s]",
+                id, patientId, doctorId, medicines);
+    }
 }

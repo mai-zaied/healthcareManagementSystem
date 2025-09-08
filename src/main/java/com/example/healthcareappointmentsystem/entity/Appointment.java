@@ -47,4 +47,10 @@ public class Appointment {
             this.endTime = this.startTime.plusMinutes(30);
         }
     }
+
+    @Override
+    public String toString() {
+        return String.format("Appointment[id=%d, doctor=%s, patient=%s, time=%s, status=%s]",
+                id,  doctor.getFullName(), patient.getFullName(), startTime, status);
+    }
 }

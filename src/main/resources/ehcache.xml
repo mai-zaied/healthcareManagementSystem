@@ -1,0 +1,21 @@
+<config xmlns="http://www.ehcache.org/v3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core.xsd
+                            http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext.xsd">
+
+    <!-- Cache for root User entity (includes Doctor and other subclasses) -->
+    <cache alias="com.example.healthcareappointmentsystem.entity.User">
+        <resources>
+            <heap unit="entries">500</heap>
+        </resources>
+    </cache>
+
+    <!-- Cache for query: doctors by specialty -->
+    <cache alias="doctorBySpecialtyQuery">
+        <resources>
+            <heap unit="entries">200</heap>
+        </resources>
+    </cache>
+
+</config>

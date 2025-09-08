@@ -3,6 +3,9 @@ package com.example.healthcareappointmentsystem.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import com.example.healthcareappointmentsystem.security.Role;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
+
 
 /**
  * This is a base class stores data for all system users
@@ -13,6 +16,8 @@ import com.example.healthcareappointmentsystem.security.Role;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "users")
 public class User {
     @Id

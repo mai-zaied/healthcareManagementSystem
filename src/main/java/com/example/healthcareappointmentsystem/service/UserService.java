@@ -12,9 +12,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+
     public AuthResponse authenticate(LoginRequest request){
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(()-> new ResourceNotFoundException("No such Email found. Email : ", request.getEmail()));
+                .orElseThrow(()-> new ResourceNotFoundException("User not found with email: ", request.getEmail()));
 
         //will add encode when apply auth for now now autherization for easier testing
         if (!user.getPassword().equals(request.getPassword())) {

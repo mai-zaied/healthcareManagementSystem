@@ -1,16 +1,26 @@
 package com.example.healthcareappointmentsystem.repository;
 
 import com.example.healthcareappointmentsystem.entity.Doctor;
+import jakarta.persistence.QueryHint;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
+
 
 import java.util.List;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
+    @Query("SELECT d FROM Doctor d WHERE d.specialty = :specialty")
+    @QueryHints({
+            @QueryHint(name = "org.hibernate.cacheable", value = "true"),
+            @QueryHint(name = "org.hibernate.cacheRegion", value = "doctorBySpecialtyQuery")
+    })
     List<Doctor> findBySpecialty(String specialty);
 
     @Query("SELECT DISTINCT d.specialty FROM Doctor d")
     List<String> findDistinctSpecialty();
+    boolean existsById(Long id);
 }
