@@ -1,5 +1,4 @@
 package com.example.healthcareappointmentsystem.service;
-
 import com.example.healthcareappointmentsystem.dto.CreatePatientRequest;
 import com.example.healthcareappointmentsystem.entity.Patient;
 import com.example.healthcareappointmentsystem.exception.DuplicateResourceException;
@@ -9,6 +8,7 @@ import com.example.healthcareappointmentsystem.repository.PatientRepository;
 import com.example.healthcareappointmentsystem.repository.UserRepository;
 import com.example.healthcareappointmentsystem.security.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +19,7 @@ public class PatientService {
     private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final MedicalRecordService medicalRecordService;
+    private final PasswordEncoder passwordEncoder;
 
     public Patient getPatientById(Long patientId) {
         return patientRepository.findById(patientId)
@@ -49,7 +50,7 @@ public class PatientService {
 
         Patient patient = new Patient();
         patient.setEmail(request.getEmail());
-        patient.setPassword(request.getPassword());
+        patient.setPassword(passwordEncoder.encode(request.getPassword()));
         patient.setFullName(request.getFullName());
         patient.setRole(Role.PATIENT);
         patient.setPhoneNumber(request.getPhoneNumber());

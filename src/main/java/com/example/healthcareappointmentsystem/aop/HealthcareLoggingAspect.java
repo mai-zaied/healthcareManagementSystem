@@ -34,7 +34,7 @@ public class HealthcareLoggingAspect {
                 break;
 
             default:
-                System.out.println("--OPERATION: " + operationType + " - " + result);
+                System.out.println("-- OPERATION: " + operationType + " - " + result);
         }
     }
 }

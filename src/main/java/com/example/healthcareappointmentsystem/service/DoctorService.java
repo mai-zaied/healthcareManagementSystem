@@ -9,6 +9,7 @@ import com.example.healthcareappointmentsystem.repository.DoctorRepository;
 import com.example.healthcareappointmentsystem.repository.UserRepository;
 import com.example.healthcareappointmentsystem.security.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<Doctor> getDoctorsBySpecialty(String specialty){
         List<Doctor> doctors = doctorRepository.findBySpecialty(specialty);
@@ -44,7 +46,7 @@ public class DoctorService {
         }
         Doctor doctor = new Doctor();
         doctor.setEmail(request.getEmail());
-        doctor.setPassword(request.getPassword());
+        doctor.setPassword(passwordEncoder.encode(request.getPassword())); // Encrypt password
         doctor.setFullName(request.getFullName());
         doctor.setRole(Role.DOCTOR);
         doctor.setSpecialty(request.getSpecialty());
@@ -69,7 +71,7 @@ public class DoctorService {
         }
 
         if (request.getPassword() != null) {
-            doctor.setPassword(request.getPassword());
+            doctor.setPassword(passwordEncoder.encode(request.getPassword()));
         }
         if (request.getFullName() != null) {
             doctor.setFullName(request.getFullName());
