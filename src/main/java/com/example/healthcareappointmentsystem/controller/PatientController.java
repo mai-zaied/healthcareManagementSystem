@@ -1,4 +1,3 @@
-
 package com.example.healthcareappointmentsystem.controller;
 
 import com.example.healthcareappointmentsystem.collection.MedicalRecord;
@@ -11,6 +10,8 @@ import com.example.healthcareappointmentsystem.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,7 +47,10 @@ public class PatientController {
     }
 
     @GetMapping("/appointments")
-    public ResponseEntity<List<Appointment>> getPatientAppointments(@RequestParam Long patientId){
+    public ResponseEntity<List<Appointment>> getPatientAppointments(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Long patientId = patientService.findByEmail(email).getId();
         List<Appointment> appointments = appointmentService.getPatientAppointments(patientId);
         return ResponseEntity.ok(appointments);
     }
@@ -59,27 +63,38 @@ public class PatientController {
 
     //Medical Records
     @GetMapping("/prescriptions")
-    public ResponseEntity<List<Prescription>> getPatientPrescriptions(@RequestParam Long patientId){
+    public ResponseEntity<List<Prescription>> getPatientPrescriptions(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Long patientId = patientService.findByEmail(email).getId();
         List<Prescription> prescriptions = prescriptionService.getPatientPrescriptions(patientId);
         return ResponseEntity.ok(prescriptions);
     }
 
     @GetMapping("/medical-record")
-    public ResponseEntity<MedicalRecord> getMedicalRecord(@RequestParam Long patientId) {
+    public ResponseEntity<MedicalRecord> getMedicalRecord() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Long patientId = patientService.findByEmail(email).getId();
         MedicalRecord medicalRecord = medicalRecordService.getMedicalRecord(patientId);
         return ResponseEntity.ok(medicalRecord);
     }
 
     // Profile Management
     @GetMapping("/profile")
-    public ResponseEntity<Patient> getPatientProfile(@RequestParam Long patientId){
+    public ResponseEntity<Patient> getPatientProfile(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Long patientId = patientService.findByEmail(email).getId();
         Patient patient = patientService.getPatientById(patientId);
         return ResponseEntity.ok(patient);
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<Patient> updatePatientProfile(@RequestParam Long patientId,
-                                                        @RequestBody Patient patientUpdates){
+    public ResponseEntity<Patient> updatePatientProfile(@RequestBody Patient patientUpdates){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Long patientId = patientService.findByEmail(email).getId();
         Patient patient = patientService.updatePatient(patientId, patientUpdates);
         return ResponseEntity.ok(patient);
     }

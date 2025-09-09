@@ -2,14 +2,13 @@ package com.example.healthcareappointmentsystem.repository;
 
 import com.example.healthcareappointmentsystem.entity.Doctor;
 import jakarta.persistence.QueryHint;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 
-
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
@@ -23,4 +22,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query("SELECT DISTINCT d.specialty FROM Doctor d")
     List<String> findDistinctSpecialty();
     boolean existsById(Long id);
+
+    Optional<Doctor> findByEmail(String email);
+
 }

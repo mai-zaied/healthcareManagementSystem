@@ -85,4 +85,9 @@ public class DoctorService {
 
         return doctorRepository.save(doctor);
     }
+    public Doctor findByEmail(String email) {
+        return doctorRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " , email));
+    }
+
 }

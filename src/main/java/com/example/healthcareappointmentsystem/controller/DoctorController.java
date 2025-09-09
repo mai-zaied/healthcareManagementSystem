@@ -5,12 +5,16 @@ import com.example.healthcareappointmentsystem.dto.CreatePrescriptionRequest;
 import com.example.healthcareappointmentsystem.dto.ScheduleRequest;
 import com.example.healthcareappointmentsystem.entity.Appointment;
 import com.example.healthcareappointmentsystem.entity.DoctorSchedule;
+import com.example.healthcareappointmentsystem.repository.UserRepository;
 import com.example.healthcareappointmentsystem.service.AppointmentService;
 import com.example.healthcareappointmentsystem.service.DoctorScheduleService;
+import com.example.healthcareappointmentsystem.service.DoctorService;
 import com.example.healthcareappointmentsystem.service.PrescriptionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +26,14 @@ public class DoctorController {
     private final AppointmentService appointmentService;
     private final PrescriptionService prescriptionService;
     private final DoctorScheduleService doctorScheduleService;
+    private final DoctorService doctorService;
 
     // Appointment Management
     @GetMapping("/appointments")
-    public ResponseEntity<List<Appointment>> getDoctorAppointments(@RequestParam Long doctorId) {
+    public ResponseEntity<List<Appointment>> getDoctorAppointments() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Long doctorId = doctorService.findByEmail(email).getId();
         List<Appointment> appointments = appointmentService.getDoctorAppointments(doctorId);
         return ResponseEntity.ok(appointments);
     }
@@ -44,7 +52,10 @@ public class DoctorController {
     }
 
     @GetMapping("/prescriptions")
-    public ResponseEntity<List<Prescription>> getDoctorPrescriptions(@RequestParam Long doctorId) {
+    public ResponseEntity<List<Prescription>> getDoctorPrescriptions() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Long doctorId = doctorService.findByEmail(email).getId();
         List<Prescription> prescriptions = prescriptionService.getDoctorPrescriptions(doctorId);
         return ResponseEntity.ok(prescriptions);
     }
@@ -56,7 +67,10 @@ public class DoctorController {
         return ResponseEntity.ok(savedSchedule);
     }
     @GetMapping("/schedule")
-    public ResponseEntity<List<DoctorSchedule>> getDoctorSchedule(@RequestParam Long doctorId) {
+    public ResponseEntity<List<DoctorSchedule>> getDoctorSchedule() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Long doctorId = doctorService.findByEmail(email).getId();
         List<DoctorSchedule> schedule = doctorScheduleService.getDoctorSchedule(doctorId);
         return ResponseEntity.ok(schedule);
     }

@@ -59,4 +59,8 @@ public class PatientService {
         medicalRecordService.createMedicalRecordForPatient(savedPatient.getId(), request);
         return savedPatient;
     }
+    public Patient findByEmail(String email) {
+        return patientRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " , email));
+    }
 }
