@@ -1,18 +1,24 @@
 package com.example.healthcareappointmentsystem.repository;
-
 import com.example.healthcareappointmentsystem.entity.Appointment;
 import com.example.healthcareappointmentsystem.entity.AppointmentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
+/**
+ * Repository interface for managing Appointment data.
+ */
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-    //overlap checking
+    /**
+     * Checks if a doctor has any appointments that overlap with a given time range
+     * @param doctorId the id of the doctor to check
+     * @param startTime the start time of the appointment
+     * @param endTime   the end time of the appointment
+     * @return true if there is at least one overlapping appointment, false otherwise
+     */
     @Query(
             "SELECT CASE WHEN COUNT (a) > 0 THEN true ELSE false END FROM Appointment a WHERE " +
                     "a.doctor.id = :doctorId AND " +
@@ -23,7 +29,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             @Param("doctorId") Long doctorId,
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime);
-
+    /**
+     * Checks if a patient already has an appointment that overlaps with a given time range
+     * @param patientId the id of the patient to check
+     * @param startTime the start time of the appointment
+     * @param endTime   the end time of the appointment
+     * @return true if the patient has an appointment at time, false otherwise
+     */
     @Query(
             "SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END FROM Appointment a WHERE " +
                     "a.patient.id = :patientId AND " +

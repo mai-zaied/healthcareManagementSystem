@@ -9,12 +9,7 @@ import java.util.List;
 import java.util.Optional;
 /**
  * Repository interface for accessing Doctor data in the database.
- * Extends JpaRepository to provide standard CRUD operations.
- * <p>Also provides custom queries for:
- *  - Finding doctors by specialty
- *  - Retrieving all unique specialties
- *  - Handling soft-deleted doctors</p>
- *  */
+ */
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query("SELECT d FROM Doctor d WHERE d.specialty = :specialty")

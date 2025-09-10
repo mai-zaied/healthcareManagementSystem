@@ -1,14 +1,13 @@
 package com.example.healthcareappointmentsystem.repository;
-
 import com.example.healthcareappointmentsystem.entity.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
-
+/**
+ * Repository interface for accessing Patient data in the database.
+ */
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     boolean existsById(Long id);
     Optional<Patient> findByEmail(String email);
-
 }

@@ -1,5 +1,4 @@
 package com.example.healthcareappointmentsystem.service;
-
 import com.example.healthcareappointmentsystem.dto.CreateDoctorRequest;
 import com.example.healthcareappointmentsystem.dto.DoctorResponse;
 import com.example.healthcareappointmentsystem.dto.UpdateDoctorRequest;
@@ -13,23 +12,21 @@ import com.example.healthcareappointmentsystem.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
+/**
+ * Service for managing doctors.
+ */
 @Service
 @RequiredArgsConstructor
 public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
     public List<DoctorResponse> getDoctorsBySpecialty(String specialty) {
         List<Doctor> doctors = doctorRepository.findBySpecialty(specialty);
-
         if (doctors.isEmpty()) {
             throw new ResourceNotFoundException("No doctors found for specialty: ", specialty);
         }
-
         return doctors.stream()
                 .map(doctor -> new DoctorResponse(
                         doctor.getId(),
@@ -41,15 +38,12 @@ public class DoctorService {
                 ))
                 .toList();
     }
-
     public List<String> getAllSpecialties() {
         return doctorRepository.findDistinctSpecialty();
     }
-
     public DoctorResponse getDoctorById(Long id) {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor", id));
-
         return new DoctorResponse(
                 doctor.getId(),
                 doctor.getEmail(),
@@ -59,7 +53,6 @@ public class DoctorService {
                 doctor.getPhoneNumber()
         );
     }
-
     public List<DoctorResponse> getAllDoctors() {
         return doctorRepository.findAllByDeletedFalse().stream()
                 .map(doctor -> new DoctorResponse(
@@ -72,7 +65,6 @@ public class DoctorService {
                 ))
                 .toList();
     }
-
     public Doctor createDoctor(CreateDoctorRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateResourceException("Email already exists: " + request.getEmail());
@@ -86,7 +78,6 @@ public class DoctorService {
         doctor.setPhoneNumber(request.getPhoneNumber());
         return doctorRepository.save(doctor);
     }
-
     public void deleteDoctor(Long id) {
         Doctor doctor = doctorRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor", id));
@@ -94,8 +85,6 @@ public class DoctorService {
         doctor.setDeleted(true); // soft delete
         doctorRepository.save(doctor);
     }
-
-
     public Doctor updateDoctor(Long id, UpdateDoctorRequest request) {
         Doctor doctor =doctorRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor", id));
@@ -106,7 +95,6 @@ public class DoctorService {
             }
             doctor.setEmail(request.getEmail());
         }
-
         if (request.getPassword() != null) {
             doctor.setPassword(passwordEncoder.encode(request.getPassword()));
         }
@@ -119,13 +107,10 @@ public class DoctorService {
         if (request.getPhoneNumber() != null) {
             doctor.setPhoneNumber(request.getPhoneNumber());
         }
-
         return doctorRepository.save(doctor);
     }
-
     public Doctor findByEmail(String email) {
         return doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " , email));
     }
-
 }
