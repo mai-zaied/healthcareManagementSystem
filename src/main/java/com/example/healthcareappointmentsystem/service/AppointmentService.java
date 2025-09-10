@@ -29,13 +29,13 @@ public class AppointmentService {
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final DoctorScheduleRepository doctorScheduleRepository;
-    @LogOperation("BOOK_APPOINTMENT")
-    /*
-     *  Book a new appointment for a patient with a doctor
-     * @param request   the appointment booking request containing doctorId and startTime
-     * @param patientId the ID of the patient booking the appointment
-     * @return an AppointmentResponse DTO representing the saved appointment
+    /**
+     *Book a new appointment for a patient with a doctor
+     *@param request   the appointment booking request containing doctorId and startTime
+     *@param patientId the ID of the patient booking the appointment
+     *@return an AppointmentResponse DTO representing the saved appointment
      */
+    @LogOperation("BOOK_APPOINTMENT")
     @Transactional
     public AppointmentResponse bookAppointment(BookAppointmentRequest request, Long patientId) {
         Patient patient = patientRepository.findById(patientId)

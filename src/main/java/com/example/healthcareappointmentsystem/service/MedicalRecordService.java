@@ -1,5 +1,4 @@
 package com.example.healthcareappointmentsystem.service;
-
 import com.example.healthcareappointmentsystem.collection.MedicalRecord;
 import com.example.healthcareappointmentsystem.dto.CreatePatientRequest;
 import com.example.healthcareappointmentsystem.exception.ResourceNotFoundException;
@@ -7,19 +6,30 @@ import com.example.healthcareappointmentsystem.repository.MedicalRecordRepositor
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Service for managing patient medical records.
+ */
 @Service
 @RequiredArgsConstructor
 public class MedicalRecordService {
     private final MedicalRecordRepository medicalRecordRepository;
+    /**
+     * Retrieves a patient's medical record by their ID.
+     * @param id the patient ID
+     * @return the patient's MedicalRecord
+     */
     public MedicalRecord getMedicalRecord(Long id){
         return medicalRecordRepository.findByPatientId(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Medical record ", id));
     }
-
+    /**
+     * Creates a new medical record for a patient upon registration.
+     * @param patientId the ID of the patient
+     * @param request CreatePatientRequest containing initial allergies and conditions
+     * @return the saved MedicalRecord
+     */
     public MedicalRecord createMedicalRecordForPatient(Long patientId, CreatePatientRequest request) {
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setPatientId(patientId);
@@ -27,10 +37,8 @@ public class MedicalRecordService {
         medicalRecord.setChronicConditions(request.getChronicConditions() != null ? request.getChronicConditions() : List.of());
         medicalRecord.setPrescriptionIds(List.of());
         medicalRecord.setLabResults(List.of());
-
         return medicalRecordRepository.save(medicalRecord);
     }
-
     public MedicalRecord addAllergies(Long patientId, List<String> allergies) {
         MedicalRecord medicalRecord = getMedicalRecord(patientId);
         if (medicalRecord.getAllergies() == null) {
@@ -39,7 +47,6 @@ public class MedicalRecordService {
         medicalRecord.getAllergies().addAll(allergies);
         return medicalRecordRepository.save(medicalRecord);
     }
-
     public MedicalRecord addChronicConditions(Long patientId, List<String> conditions) {
         MedicalRecord medicalRecord = getMedicalRecord(patientId);
         if (medicalRecord.getChronicConditions() == null) {
@@ -48,7 +55,6 @@ public class MedicalRecordService {
         medicalRecord.getChronicConditions().addAll(conditions);
         return medicalRecordRepository.save(medicalRecord);
     }
-
     public MedicalRecord addLabResults(Long patientId, List<String> labResults) {
         MedicalRecord medicalRecord = getMedicalRecord(patientId);
         if (medicalRecord.getLabResults() == null) {
@@ -57,7 +63,12 @@ public class MedicalRecordService {
         medicalRecord.getLabResults().addAll(labResults);
         return medicalRecordRepository.save(medicalRecord);
     }
-
+    /**
+     * Links a prescription to a patient's medical record.
+     * If the record does not exist, it is created automatically.
+     * @param patientId the patient ID
+     * @param prescriptionId the prescription ID to add
+     */
     @Transactional
     public void addPrescriptionToMedicalRecord(Long patientId, String prescriptionId){
         MedicalRecord medicalRecord = medicalRecordRepository.findByPatientId(patientId)

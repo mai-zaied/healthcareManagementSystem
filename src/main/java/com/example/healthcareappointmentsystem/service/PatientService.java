@@ -1,5 +1,4 @@
 package com.example.healthcareappointmentsystem.service;
-
 import com.example.healthcareappointmentsystem.dto.CreatePatientRequest;
 import com.example.healthcareappointmentsystem.dto.PatientResponse;
 import com.example.healthcareappointmentsystem.entity.Patient;
@@ -12,8 +11,10 @@ import com.example.healthcareappointmentsystem.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+/**
+ * Service for managing patient accounts and related operations.
+ */
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,11 @@ public class PatientService {
     private final UserRepository userRepository;
     private final MedicalRecordService medicalRecordService;
     private final PasswordEncoder passwordEncoder;
-
+    /**
+     * Retrieves a patient by their ID.
+     * @param patientId the ID of the patient
+     * @return PatientResponse containing patient details
+     */
     public PatientResponse getPatientById(Long patientId) {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(()->new ResourceNotFoundException("Patient", patientId));
@@ -35,7 +40,6 @@ public class PatientService {
                 patient.getDateOfBirth()
         );
     }
-
     public List<PatientResponse> getAllPatients() {
         return patientRepository.findAll().stream()
                 .map(patient -> new PatientResponse(
@@ -48,7 +52,6 @@ public class PatientService {
                 ))
                 .toList();
     }
-
     public Patient updatePatient(Long id, Patient patientUpdates) {
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor", id));
@@ -62,12 +65,15 @@ public class PatientService {
 
         return patientRepository.save(patient);
     }
-
+    /**
+     * Creates a new patient account and initializes their medical record.
+     * @param request CreatePatientRequest containing patient registration details
+     * @return the saved Patient entity
+     */
     public Patient createPatient(CreatePatientRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateResourceException("Email already exists: " + request.getEmail());
         }
-
         Patient patient = new Patient();
         patient.setEmail(request.getEmail());
         patient.setPassword(passwordEncoder.encode(request.getPassword()));
