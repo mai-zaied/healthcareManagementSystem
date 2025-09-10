@@ -1,5 +1,4 @@
 package com.example.healthcareappointmentsystem.entity;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -8,11 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Represents a patient in the system, extending the base User class.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -20,7 +18,6 @@ import java.util.List;
 @Entity
 @Table(name = "patients")
 public class Patient extends User {
-
     private String phoneNumber;
     private LocalDate dateOfBirth;
 }

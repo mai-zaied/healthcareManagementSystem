@@ -1,11 +1,13 @@
 package com.example.healthcareappointmentsystem.collection;
-
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.LocalDateTime;
 import java.util.List;
+/**
+ * Represents a prescription issued to a patient by a doctor
+ * Linked to a patient, doctor, and appointment with their IDs
+ */
 
 @Getter
 @Setter

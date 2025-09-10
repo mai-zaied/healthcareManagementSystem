@@ -19,16 +19,17 @@ public class MedicalRecordService {
         return medicalRecordRepository.findByPatientId(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Medical record ", id));
     }
+
     public MedicalRecord createMedicalRecordForPatient(Long patientId, CreatePatientRequest request) {
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setPatientId(patientId);
-        medicalRecord.setAllergies(request.getAllergies());
-        medicalRecord.setChronicConditions(request.getChronicConditions());
+        medicalRecord.setAllergies(request.getAllergies() != null ? request.getAllergies() : List.of());
+        medicalRecord.setChronicConditions(request.getChronicConditions() != null ? request.getChronicConditions() : List.of());
         medicalRecord.setPrescriptionIds(List.of());
         medicalRecord.setLabResults(List.of());
+
         return medicalRecordRepository.save(medicalRecord);
     }
-
 
     public MedicalRecord addAllergies(Long patientId, List<String> allergies) {
         MedicalRecord medicalRecord = getMedicalRecord(patientId);

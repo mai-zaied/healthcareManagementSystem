@@ -1,5 +1,7 @@
 package com.example.healthcareappointmentsystem.service;
+
 import com.example.healthcareappointmentsystem.dto.CreatePatientRequest;
+import com.example.healthcareappointmentsystem.dto.PatientResponse;
 import com.example.healthcareappointmentsystem.entity.Patient;
 import com.example.healthcareappointmentsystem.exception.DuplicateResourceException;
 import com.example.healthcareappointmentsystem.exception.ResourceNotFoundException;
@@ -21,17 +23,35 @@ public class PatientService {
     private final MedicalRecordService medicalRecordService;
     private final PasswordEncoder passwordEncoder;
 
-    public Patient getPatientById(Long patientId) {
-        return patientRepository.findById(patientId)
+    public PatientResponse getPatientById(Long patientId) {
+        Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(()->new ResourceNotFoundException("Patient", patientId));
+        return new PatientResponse(
+                patient.getId(),
+                patient.getEmail(),
+                patient.getFullName(),
+                patient.getRole().name(),
+                patient.getPhoneNumber(),
+                patient.getDateOfBirth()
+        );
     }
 
-    public List<Patient> getAllPatients() {
-        return patientRepository.findAll();
+    public List<PatientResponse> getAllPatients() {
+        return patientRepository.findAll().stream()
+                .map(patient -> new PatientResponse(
+                        patient.getId(),
+                        patient.getEmail(),
+                        patient.getFullName(),
+                        patient.getRole().name(),
+                        patient.getPhoneNumber(),
+                        patient.getDateOfBirth()
+                ))
+                .toList();
     }
 
     public Patient updatePatient(Long id, Patient patientUpdates) {
-        Patient patient = getPatientById(id);
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor", id));
 
         if (patientUpdates.getPhoneNumber() != null) {
             patient.setPhoneNumber(patientUpdates.getPhoneNumber());

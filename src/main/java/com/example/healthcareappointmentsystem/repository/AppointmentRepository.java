@@ -24,6 +24,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime);
 
+    @Query(
+            "SELECT CASE WHEN COUNT(a) > 0 THEN true ELSE false END FROM Appointment a WHERE " +
+                    "a.patient.id = :patientId AND " +
+                    "a.status <> 'CANCELLED' AND " +
+                    "(:startTime < a.endTime AND :endTime > a.startTime)"
+    )
+    boolean existsOverlappingPatientAppointment(
+            @Param("patientId") Long patientId,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime);
 
     List<Appointment> findByPatientId(Long patientId);
     List<Appointment> findByDoctorId(Long doctorId);

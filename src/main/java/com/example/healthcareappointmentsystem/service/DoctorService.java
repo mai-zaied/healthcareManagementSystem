@@ -1,6 +1,8 @@
 package com.example.healthcareappointmentsystem.service;
 
 import com.example.healthcareappointmentsystem.dto.CreateDoctorRequest;
+import com.example.healthcareappointmentsystem.dto.DoctorResponse;
+import com.example.healthcareappointmentsystem.dto.UpdateDoctorRequest;
 import com.example.healthcareappointmentsystem.entity.Doctor;
 import com.example.healthcareappointmentsystem.entity.User;
 import com.example.healthcareappointmentsystem.exception.DuplicateResourceException;
@@ -21,23 +23,54 @@ public class DoctorService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<Doctor> getDoctorsBySpecialty(String specialty){
+    public List<DoctorResponse> getDoctorsBySpecialty(String specialty) {
         List<Doctor> doctors = doctorRepository.findBySpecialty(specialty);
+
         if (doctors.isEmpty()) {
-            throw new ResourceNotFoundException("No doctors found for specialty: " , specialty);
+            throw new ResourceNotFoundException("No doctors found for specialty: ", specialty);
         }
-        return doctors;
+
+        return doctors.stream()
+                .map(doctor -> new DoctorResponse(
+                        doctor.getId(),
+                        doctor.getEmail(),
+                        doctor.getFullName(),
+                        doctor.getRole().toString(),
+                        doctor.getSpecialty(),
+                        doctor.getPhoneNumber()
+                ))
+                .toList();
     }
+
     public List<String> getAllSpecialties() {
         return doctorRepository.findDistinctSpecialty();
     }
-    public Doctor getDoctorById(Long id) {
-        return doctorRepository.findById(id)
+
+    public DoctorResponse getDoctorById(Long id) {
+        Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor", id));
+
+        return new DoctorResponse(
+                doctor.getId(),
+                doctor.getEmail(),
+                doctor.getFullName(),
+                doctor.getRole().name(),
+                doctor.getSpecialty(),
+                doctor.getPhoneNumber()
+        );
     }
 
-    public List<Doctor> getAllDoctors() {
-        return doctorRepository.findAll();
+    public List<DoctorResponse> getAllDoctors() {
+        return doctorRepository.findAllByDeletedFalse().stream()
+                .map(doctor -> new DoctorResponse(
+                        doctor.getId(),
+                        doctor.getEmail(),
+                        doctor.getFullName(),
+                        doctor.getRole().name(),
+                        doctor.getSpecialty(),
+                        doctor.getPhoneNumber()
+                ))
+                .toList();
     }
 
     public Doctor createDoctor(CreateDoctorRequest request) {
@@ -46,22 +79,26 @@ public class DoctorService {
         }
         Doctor doctor = new Doctor();
         doctor.setEmail(request.getEmail());
-        doctor.setPassword(passwordEncoder.encode(request.getPassword())); // Encrypt password
+        doctor.setPassword(passwordEncoder.encode(request.getPassword()));
         doctor.setFullName(request.getFullName());
         doctor.setRole(Role.DOCTOR);
         doctor.setSpecialty(request.getSpecialty());
         doctor.setPhoneNumber(request.getPhoneNumber());
         return doctorRepository.save(doctor);
     }
+
     public void deleteDoctor(Long id) {
-        if (!doctorRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Doctor", id);
-        }
-        doctorRepository.deleteById(id);
+        Doctor doctor = doctorRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor", id));
+
+        doctor.setDeleted(true); // soft delete
+        doctorRepository.save(doctor);
     }
 
-    public Doctor updateDoctor(Long id, CreateDoctorRequest request) {
-        Doctor doctor = getDoctorById(id);
+
+    public Doctor updateDoctor(Long id, UpdateDoctorRequest request) {
+        Doctor doctor =doctorRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor", id));
 
         if (request.getEmail() != null && !request.getEmail().equals(doctor.getEmail())) {
             if (userRepository.existsByEmail(request.getEmail())) {
@@ -85,6 +122,7 @@ public class DoctorService {
 
         return doctorRepository.save(doctor);
     }
+
     public Doctor findByEmail(String email) {
         return doctorRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Doctor not found with email: " , email));
