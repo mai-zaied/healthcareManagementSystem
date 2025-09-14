@@ -24,6 +24,5 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime);
     List<DoctorSchedule> findByDoctorId(Long doctorId);
-    List<DoctorSchedule> findByDoctorIdAndDate(Long doctorId, LocalDate date);
-    void deleteByDoctorId(Long doctorId);
+    Optional<DoctorSchedule> findByDoctorIdAndDate(Long doctorId, LocalDate date);
 }

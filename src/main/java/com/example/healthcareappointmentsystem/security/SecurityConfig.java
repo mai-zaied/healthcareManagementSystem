@@ -54,6 +54,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        //ROLE_ROLE_ADMIN
                         .requestMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/api/doctor/**").hasRole(Role.DOCTOR.name())
                         .requestMatchers("/api/patient/**").hasRole(Role.PATIENT.name())

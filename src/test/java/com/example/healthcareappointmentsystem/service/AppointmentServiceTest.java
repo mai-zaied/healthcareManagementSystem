@@ -110,6 +110,7 @@ class AppointmentServiceTest {
         assertThrows(ResourceNotFoundException.class,
                 () -> appointmentService.bookAppointment(request, 1L));
     }
+
     @Test
     void bookAppointment_doctorNotAvailable() {
         BookAppointmentRequest request = new BookAppointmentRequest();
@@ -158,6 +159,7 @@ class AppointmentServiceTest {
         assertThrows(TimeSlotNotAvailableException.class,
                 () -> appointmentService.bookAppointment(request, 1L));
     }
+
     @Test
     void markAppointmentCompleted_success() {
         Appointment appointment = new Appointment();
@@ -180,6 +182,7 @@ class AppointmentServiceTest {
         assertThrows(ResourceNotFoundException.class,
                 () -> appointmentService.markAppointmentCompleted(5L));
     }
+
     @Test
     void cancelAppointment_success() {
         Appointment appointment = new Appointment();

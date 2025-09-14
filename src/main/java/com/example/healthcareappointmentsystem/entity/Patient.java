@@ -3,6 +3,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
@@ -19,5 +20,6 @@ import java.time.LocalDate;
 @Table(name = "patients")
 public class Patient extends User {
     private String phoneNumber;
+    @Past
     private LocalDate dateOfBirth;
 }

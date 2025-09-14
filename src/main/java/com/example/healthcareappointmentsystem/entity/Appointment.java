@@ -37,13 +37,7 @@ public class Appointment {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AppointmentStatus status = AppointmentStatus.SCHEDULED;
-    @PrePersist
-    @PreUpdate
-    public void calculateEndTime() {
-        if (this.startTime != null) {
-            this.endTime = this.startTime.plusMinutes(30);
-        }
-    }
+
     @Override
     public String toString() {
         return String.format("Appointment[id=%d, doctor=%s, patient=%s, time=%s, status=%s]",

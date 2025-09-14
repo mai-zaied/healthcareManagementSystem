@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a doctor's work schedule for a specific day.
  * Each schedule is linked to a specific Doctor.
@@ -32,4 +35,16 @@ public class DoctorSchedule {
     private LocalTime endTime;
     // Slot duration in minutes for this day (30)
     private Integer slotDuration = 30;
+
+    public List<LocalTime[]> getAvailableSlots() {
+        List<LocalTime[]> slots = new ArrayList<>();
+        LocalTime slotStart = startTime;
+        while (slotStart.isBefore(endTime)) {
+            LocalTime slotEnd = slotStart.plusMinutes(slotDuration);
+            if (slotEnd.isAfter(endTime)) break;
+            slots.add(new LocalTime[]{slotStart, slotEnd});
+            slotStart = slotEnd;
+        }
+        return slots;
+    }
 }

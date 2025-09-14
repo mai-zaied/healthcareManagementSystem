@@ -3,16 +3,20 @@ package com.example.healthcareappointmentsystem.aop;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
 public class HealthcareLoggingAspect {
+    private static final Logger log = LoggerFactory.getLogger(HealthcareLoggingAspect.class);
 
     @AfterReturning(
             pointcut = "@annotation(logOperation)",
             returning = "result"
     )
+
     public void logAppointmentBooking(JoinPoint joinPoint, LogOperation logOperation, Object result) {
         String operationType = logOperation.value();
 
