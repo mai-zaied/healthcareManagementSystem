@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: healthcare-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: healthcare_db
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+  mongo:
+    image: mongo:6.0
+    container_name: healthcare-mongo
+    environment:
+      MONGO_INITDB_DATABASE: healthcare_db
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+  app:
+    build: .
+    container_name: healthcare-app
+    depends_on:
+      - mysql
+      - mongo
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/healthcare_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/healthcare_db
+    ports:
+      - "8080:8080"
+volumes:
+  mysql-data:
+  mongo-data:

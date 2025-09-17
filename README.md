@@ -156,3 +156,23 @@ The project relies on the following key dependencies:
 - **Spring Boot Starter Test** → Unit and integration testing
 - **Mockito Core & Mockito JUnit Jupiter** → Mocking for unit tests
 - **Spring Security Test** → Security testing utilities
+
+## Build & Run Instructions
+-**Clone the repository** 
+```text
+git clone git@github.com:mai-zaied/healthcareManagementSystem.git
+cd healthcare-appointment-system
+```
+-**Build the Docker image**
+```text
+docker compose build
+```
+-**Start the containers**
+```text
+docker compose up -d
+```
+-**Stop the containers**
+```text
+docker compose stop
+```
+

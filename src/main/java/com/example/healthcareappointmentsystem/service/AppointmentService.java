@@ -12,7 +12,6 @@ import com.example.healthcareappointmentsystem.repository.PatientRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalTime;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
